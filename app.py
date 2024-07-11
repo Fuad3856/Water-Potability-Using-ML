@@ -1,32 +1,32 @@
-# %%
+from sklearn.preprocessing import MinMaxScaler, PolynomialFeatures
+from xgboost import XGBClassifier
 import streamlit as st
 import pandas as pd
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler
-from xgboost import XGBClassifier
 
-# Load the dataset
-data = pd.read_csv("water_potability.csv")
+# Load and preprocess data
+data = pd.read_csv("water_potability.csv").dropna()
 
-# Split the dataset into training and testing sets
-train = data.sample(frac=0.8, random_state=42)
-test = data.drop(train.index)
+# Upsample minority class
+num = data.iloc[:, -1].value_counts()
+minority_data = data[data.iloc[:, -1] == 1]
+upsampled_data = pd.concat([minority_data.sample(num[0], replace=True, random_state=42), data[data.iloc[:, -1] == 0]])
 
-# Initialize SimpleImputer and StandardScaler
-imputer = SimpleImputer(strategy='mean')
-scaler = StandardScaler()
+# Preprocessing: Scaling and polynomial features
+scaler = MinMaxScaler()
+polynom = PolynomialFeatures(degree=3)
 
-# Fit imputer and scaler with training data
-imputer.fit(train.iloc[:, :-1])
-scaler.fit(train.iloc[:, :-1])
+X = polynom.fit_transform(upsampled_data.iloc[:, :-1])
+X_scaled = scaler.fit_transform(X)
+y = upsampled_data.iloc[:, -1]
 
-# Initialize and train the model
-model_random = XGBClassifier(random_state=42)
-model_random.fit(train.iloc[:, :-1], train.iloc[:, -1])
+# Model training
+model_xgb = XGBClassifier(random_state=42, n_estimators=300)
+model_xgb.fit(X_scaled, y)
 
 # Streamlit app
 st.title('Water Potability Prediction')
 
+# Sidebar for user input
 st.sidebar.header('User Input Parameters')
 
 def user_input_features():
@@ -60,26 +60,20 @@ input_df = user_input_features()
 st.subheader('User Input parameters')
 st.write(input_df)
 
-# Add a button for prediction
+# Prediction
 if st.button('Predict'):
     # Preprocess user input
-    input_df_transformed = pd.DataFrame(imputer.transform(input_df), columns=train.columns[:-1])
-    input_df_transformed = pd.DataFrame(scaler.transform(input_df_transformed), columns=train.columns[:-1])
-
+    input_poly = polynom.transform(input_df)
+    input_scaled = scaler.transform(input_poly)
+    
     # Make prediction
-    prediction = model_random.predict(input_df_transformed)
-    prediction_proba = model_random.predict_proba(input_df_transformed)
-
+    prediction = model_xgb.predict(input_scaled)
+    prediction_proba = model_xgb.predict_proba(input_scaled)
+    
     # Output prediction
     st.subheader('Prediction')
     potability = 'Potable' if prediction[0] == 1 else 'Not Potable'
     st.write(potability)
-
+    
     st.subheader('Prediction Probability')
     st.write(prediction_proba)
-
-
-# %%
-
-
-
