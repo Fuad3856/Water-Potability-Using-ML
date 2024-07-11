@@ -45,7 +45,7 @@ Turbidity = st.sidebar.number_input('Turbidity', value=3.422179)
 # Prediction
 if st.button('Predict'):
     # Preprocess user input
-        data = {
+    data = {
         'ph': ph,
         'Hardness': Hardness,
         'Solids': Solids,
@@ -57,7 +57,7 @@ if st.button('Predict'):
         'Turbidity': Turbidity
     }
     features = pd.DataFrame(data, index=[0])
-    
+
     input_poly = polynom.transform(features)
     input_scaled = scaler.transform(input_poly)
     
