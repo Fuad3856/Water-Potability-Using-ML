@@ -29,18 +29,23 @@ st.title('Water Potability Prediction')
 # Sidebar for user input
 st.sidebar.header('User Input Parameters')
 
-def user_input_features():
-    ph = st.sidebar.number_input('ph', value=6.704635)
-    Hardness = st.sidebar.number_input('Hardness', value=230.766940)
-    Solids = st.sidebar.number_input('Solids', value=9727.761716)
-    Chloramines = st.sidebar.number_input('Chloramines', value=5.943695)
-    Sulfate = st.sidebar.number_input('Sulfate', value=223.235816)
-    Conductivity = st.sidebar.number_input('Conductivity', value=405.761571)
-    Organic_carbon = st.sidebar.number_input('Organic_carbon', value=12.826509)
-    Trihalomethanes = st.sidebar.number_input('Trihalomethanes', value=74.385199)
-    Turbidity = st.sidebar.number_input('Turbidity', value=3.422179)
+
+ph = st.sidebar.number_input('ph', value=6.704635)
+Hardness = st.sidebar.number_input('Hardness', value=230.766940)
+Solids = st.sidebar.number_input('Solids', value=9727.761716)
+Chloramines = st.sidebar.number_input('Chloramines', value=5.943695)
+Sulfate = st.sidebar.number_input('Sulfate', value=223.235816)
+Conductivity = st.sidebar.number_input('Conductivity', value=405.761571)
+Organic_carbon = st.sidebar.number_input('Organic_carbon', value=12.826509)
+Trihalomethanes = st.sidebar.number_input('Trihalomethanes', value=74.385199)
+Turbidity = st.sidebar.number_input('Turbidity', value=3.422179)
     
-    data = {
+
+
+# Prediction
+if st.button('Predict'):
+    # Preprocess user input
+        data = {
         'ph': ph,
         'Hardness': Hardness,
         'Solids': Solids,
@@ -52,18 +57,8 @@ def user_input_features():
         'Turbidity': Turbidity
     }
     features = pd.DataFrame(data, index=[0])
-    return features
-
-input_df = user_input_features()
-
-# Display user input
-st.subheader('User Input parameters')
-st.write(input_df)
-
-# Prediction
-if st.button('Predict'):
-    # Preprocess user input
-    input_poly = polynom.transform(input_df)
+    
+    input_poly = polynom.transform(features)
     input_scaled = scaler.transform(input_poly)
     
     # Make prediction
