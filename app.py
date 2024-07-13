@@ -32,16 +32,19 @@ st.title('Water Potability Prediction')
 st.sidebar.header('User Input Parameters')
 
 
-# User inputs with min and max values
-ph = st.sidebar.number_input('ph', value=6.704635, min_value=0.0, max_value=14.0)
-Hardness = st.sidebar.number_input('Hardness', value=230.766940, min_value=0.0, max_value=500.0)
-Solids = st.sidebar.number_input('Solids', value=9727.761716, min_value=0.0, max_value=50000.0)
-Chloramines = st.sidebar.number_input('Chloramines', value=2.0, min_value=0.0, max_value=15.0)
-Sulfate = st.sidebar.number_input('Sulfate', value=223.235816, min_value=0.0, max_value=1000.0)
-Conductivity = st.sidebar.number_input('Conductivity', value=405.761571, min_value=0.0, max_value=2000.0)
-Organic_carbon = st.sidebar.number_input('Organic_carbon', value=12.826509, min_value=0.0, max_value=30.0)
-Trihalomethanes = st.sidebar.number_input('Trihalomethanes', value=74.385199, min_value=0.0, max_value=200.0)
-Turbidity = st.sidebar.number_input('Turbidity', value=3.422179, min_value=0.0, max_value=10.0)
+# User inputs with min and max values in labels
+ph = st.sidebar.number_input('ph (0.0 to 14.0)', value=6.704635, min_value=0.0, max_value=14.0)
+Hardness = st.sidebar.number_input('Hardness (0.0 to 500.0)', value=230.766940, min_value=0.0, max_value=500.0)
+Solids = st.sidebar.number_input('Solids (0.0 to 50000.0)', value=9727.761716, min_value=0.0, max_value=50000.0)
+Chloramines = st.sidebar.number_input('Chloramines (0.0 to 15.0)', value=5.943695, min_value=0.0, max_value=15.0)
+Sulfate = st.sidebar.number_input('Sulfate (0.0 to 1000.0)', value=223.235816, min_value=0.0, max_value=1000.0)
+Conductivity = st.sidebar.number_input('Conductivity (0.0 to 2000.0)', value=405.761571, min_value=0.0, max_value=2000.0)
+Organic_carbon = st.sidebar.number_input('Organic Carbon (0.0 to 30.0)', value=12.826509, min_value=0.0, max_value=30.0)
+Trihalomethanes = st.sidebar.number_input('Trihalomethanes (0.0 to 200.0)', value=74.385199, min_value=0.0, max_value=200.0)
+Turbidity = st.sidebar.number_input('Turbidity (0.0 to 10.0)', value=3.422179, min_value=0.0, max_value=10.0)
+
+
+
 
 
 # Prediction
