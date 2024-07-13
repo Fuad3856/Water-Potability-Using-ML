@@ -1,5 +1,5 @@
 from sklearn.preprocessing import MinMaxScaler, PolynomialFeatures
-from xgboost import XGBClassifier
+from sklearn.ensemble import RandomForestClassifier
 import streamlit as st
 import pandas as pd
 
@@ -20,8 +20,10 @@ X_scaled = scaler.fit_transform(X)
 y = upsampled_data.iloc[:, -1]
 
 # Model training
-model_xgb = XGBClassifier(random_state=42, n_estimators=300)
-model_xgb.fit(X_scaled, y)
+model_rf = RandomForestClassifier()
+
+model_rf.fit(X_scaled, y)
+
 
 # Streamlit app
 st.title('Water Potability Prediction')
@@ -62,8 +64,8 @@ if st.button('Predict'):
     input_scaled = scaler.transform(input_poly)
     
     # Make prediction
-    prediction = model_xgb.predict(input_scaled)
-    prediction_proba = model_xgb.predict_proba(input_scaled)
+    prediction = model_rf.predict(input_scaled)
+    prediction_proba = model_rf.predict_proba(input_scaled)
     
     # Output prediction
     st.subheader('Prediction')
